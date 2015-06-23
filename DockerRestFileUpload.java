@@ -242,7 +242,7 @@ public class DockerRestFileUpload {
 
 	}
 
-	private static final Logger log = LoggerFactory.getLogger(HttpHijack.class);
+	private static final Logger log = LoggerFactory.getLogger(DockerRestFileUpload.class);
 
 	private URI uri;
 
