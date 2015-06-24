@@ -112,6 +112,12 @@ public class DockerRestFileUpload {
 				public void write(byte[] b) throws IOException {
 					uploadFile.socket.getOutputStream().write(b);
 				}
+				
+				@Override
+				public void write(byte[] b, int off, int len)
+						throws IOException {
+					uploadFile.socket.getOutputStream().write(b, off, len);
+				}
 
 				@Override
 				public void close() throws IOException {
@@ -154,6 +160,8 @@ public class DockerRestFileUpload {
 	}
 
 	private void execCreate() throws IOException {
+		///Note to docker-java users - currently it's not able to encode ">" as escape sequence in JSON
+		///its either ">"" or "\\u003e" instead of \u003e which causes inconvenience
 		String payload = "{\"Detach\": false,\"Tty\": false,\"AttachStdin\" :true, "
 				+ "\"AttachStdout\" :true,\"AttachStderr\":true,"
 				+ "\"Cmd\":[\"/bin/bash\", \"-c\", \"cat \\"
