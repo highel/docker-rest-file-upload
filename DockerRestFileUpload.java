@@ -22,7 +22,7 @@
  * 
  * Upload is implemented by emulating 
  * 
- * docker run -i ubuntu /bin/bash -c 'cat > file' < file 
+ * docker exec -i ubuntu /bin/bash -c 'cat > file' < file 
  * 
  * behavior.
  * 
