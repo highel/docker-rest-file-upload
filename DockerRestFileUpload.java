@@ -100,31 +100,35 @@ public class DockerRestFileUpload {
 		try {
 			uploadFile.execCreate();
 			uploadFile.execStartAndUpgrade();
-			needToClose = false;
 			final OutputStream os = uploadFile.socket.getOutputStream();
-			return new OutputStream() {
-				@Override
-				public void write(int b) throws IOException {
-					os.write(b);
-				}
+			try{
+				return new OutputStream() {
+					@Override
+					public void write(int b) throws IOException {
+						os.write(b);
+					}
 
-				@Override
-				public void write(byte[] b) throws IOException {
-					os.write(b);
-				}
+					@Override
+					public void write(byte[] b) throws IOException {
+						os.write(b);
+					}
 
-				@Override
-				public void write(byte[] b, int off, int len)
+					@Override
+					public void write(byte[] b, int off, int len)
 						throws IOException {
-					os.write(b, off, len);
-				}
+						os.write(b, off, len);
+					}
 
-				@Override
-				public void close() throws IOException {
-					uploadFile.socket.getOutputStream().flush();
-					uploadFile.close();
-				}
-			};
+					@Override
+					public void close() throws IOException {
+						os.flush();
+						uploadFile.close();
+					}
+				};
+			}
+			finally{
+				needToClose = false;
+			}
 		} finally {
 			if (needToClose)
 				try {
@@ -171,7 +175,7 @@ public class DockerRestFileUpload {
 
 
 		StringBuffer request = new StringBuffer();
-		request.append("POST " + path + "v1.18/containers/" + containerId
+		request.append("POST " + path + "containers/" + containerId
 				+ "/exec" + " HTTP/1.1\r\n");
 		request.append("Host: " + host + "\r\n");
 		request.append("Content-Type: application/json\r\n");
@@ -225,7 +229,7 @@ public class DockerRestFileUpload {
 		String payload = "{\"Detach\": false,\"Tty\": false,\"AttachStdin\" :true, \"AttachStdout\" :true,\"AttachStderr\":true}";
 
 		StringBuffer request = new StringBuffer();
-		request.append("POST " + path + "v1.18/exec/" + execId + "/start"
+		request.append("POST " + path + "exec/" + execId + "/start"
 				+ " HTTP/1.1\r\n");
 		request.append("Upgrade: tcp\r\n");
 		request.append("Connection: Upgrade\r\n");
