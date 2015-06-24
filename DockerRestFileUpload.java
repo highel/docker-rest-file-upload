@@ -101,22 +101,22 @@ public class DockerRestFileUpload {
 			uploadFile.execCreate();
 			uploadFile.execStartAndUpgrade();
 			needToClose = false;
+			final OutputStream os = uploadFile.socket.getOutputStream();
 			return new OutputStream() {
-
 				@Override
 				public void write(int b) throws IOException {
-					uploadFile.socket.getOutputStream().write(b);
+					os.write(b);
 				}
 
 				@Override
 				public void write(byte[] b) throws IOException {
-					uploadFile.socket.getOutputStream().write(b);
+					os.write(b);
 				}
-				
+
 				@Override
 				public void write(byte[] b, int off, int len)
 						throws IOException {
-					uploadFile.socket.getOutputStream().write(b, off, len);
+					os.write(b, off, len);
 				}
 
 				@Override
@@ -164,9 +164,11 @@ public class DockerRestFileUpload {
 		///its either ">"" or "\\u003e" instead of \u003e which causes inconvenience
 		String payload = "{\"Detach\": false,\"Tty\": false,\"AttachStdin\" :true, "
 				+ "\"AttachStdout\" :true,\"AttachStderr\":true,"
-				+ "\"Cmd\":[\"/bin/bash\", \"-c\", \"cat \\"
-				+ "u003e "
-				+ filename + " \"]}";
+				+ "\"Cmd\":[\"/bin/bash\", \"-c\","
+				+ " \"touch '"
+				+ filename
+				+ "' && echo 'ok' && false || cat \\" + "u003e '" + filename + "' \"]}";
+
 
 		StringBuffer request = new StringBuffer();
 		request.append("POST " + path + "v1.18/containers/" + containerId
@@ -249,6 +251,11 @@ public class DockerRestFileUpload {
 			header = reader.readLine();
 			log.info("header: {}", header);
 		} while (!header.equals(""));
+		
+		String ok = reader.readLine();
+		if (!ok.trim().equals("ok")) {
+			throw new IllegalStateException(ok);
+		}
 
 	}
 
