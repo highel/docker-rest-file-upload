@@ -180,9 +180,10 @@ public class DockerRestFileUpload {
 		if (header.contains("404"))
 			throw new IllegalStateException("Container with ID " + containerId
 					+ " not found");
+		String line;
 		do {
-			String line = reader.readLine();
-			if (line.contains("\"Id\":")) {
+			line = reader.readLine();
+			if (line != null && line.contains("\"Id\":")) {
 				@SuppressWarnings("resource")
 				Scanner scanner = new Scanner(line).useDelimiter(":");
 				String s = scanner.next();
@@ -192,8 +193,9 @@ public class DockerRestFileUpload {
 				}
 				break;
 			}
-			System.out.println(line);
-		} while (true);
+		} while (line != null);
+		if (this.execId == null)
+			throw new IllegalStateException("Failed to start exec");
 	}
 
 	public static void main(String[] args) throws Exception {
