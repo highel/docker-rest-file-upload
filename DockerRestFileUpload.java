@@ -1,22 +1,22 @@
 
 /**
  *
- *Licensed to the Apache Software Foundation (ASF) under one
- *or more contributor license agreements.  See the NOTICE file
- *distributed with this work for additional information
- *regarding copyright ownership.  The ASF licenses this file
- *to you under the Apache License, Version 2.0 (the
- *"License"); you may not use this file except in compliance
- *with the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *  http://www.apache.org/licenses/LICENSE-2.0
  *
- *Unless required by applicable law or agreed to in writing,
- *software distributed under the License is distributed on an
- *"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *KIND, either express or implied.  See the License for the
- *specific language governing permissions and limitations
- * under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ *  under the License.
  *
  * This class allows to upload files into running Docker container via docker rest API (v.18 + required)
  * 
@@ -161,7 +161,7 @@ public class DockerRestFileUpload {
 
 	private void execCreate() throws IOException {
 		///Note to docker-java users - currently it's not able to encode ">" as escape sequence in JSON
-		///its either ">"" or "\\u003e" instead of \u003e which causes inconvenience
+		///its either ">" or "\\u003e" instead of \u003e which causes inconvenience
 		String payload = "{\"Detach\": false,\"Tty\": false,\"AttachStdin\" :true, "
 				+ "\"AttachStdout\" :true,\"AttachStderr\":true,"
 				+ "\"Cmd\":[\"/bin/bash\", \"-c\","
@@ -214,7 +214,7 @@ public class DockerRestFileUpload {
 		try {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					outputStream));
-			bw.write("Mabel and Dipper");
+			bw.write("Mabel and Dipper\n");
 			bw.flush();
 		} finally {
 			outputStream.close();
@@ -254,7 +254,7 @@ public class DockerRestFileUpload {
 		
 		String ok = reader.readLine();
 		if (!ok.trim().equals("ok")) {
-			throw new IllegalStateException(ok);
+			throw new IllegalStateException("Unexpected result of touch. " + ok);
 		}
 
 	}
