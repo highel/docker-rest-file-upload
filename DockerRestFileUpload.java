@@ -213,15 +213,13 @@ public class DockerRestFileUpload {
 	}
 
 	public static void main(String[] args) throws Exception {
-		OutputStream outputStream = uploadFile("http://localhost:4243",
-				"abcdefg", "/var/log/example.txt");
-		try {
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-					outputStream));
-			bw.write("Mabel and Dipper\n");
-			bw.flush();
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+				DockerRestFileUpload.uploadFile("http://localhost:4243", "c0111a111e", 
+					"/var/log/example.txt")));
+		try { 
+			bw.write("Mabel and Dipper!\n"); 
 		} finally {
-			outputStream.close();
+			bw.close();
 		}
 	}
 
