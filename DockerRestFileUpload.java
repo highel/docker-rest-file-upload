@@ -121,8 +121,12 @@ public class DockerRestFileUpload {
 
 					@Override
 					public void close() throws IOException {
-						os.flush();
-						uploadFile.close();
+						try {
+							os.flush();
+						}
+						finally {
+							uploadFile.close();
+						}
 					}
 				};
 			}
