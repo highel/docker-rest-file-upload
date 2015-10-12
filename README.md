@@ -1,3 +1,9 @@
+# update
+With Docker API 1.20+ you can send tar archive and upload files directly, please use that method on new containers instead https://docs.docker.com/reference/api/docker_remote_api/ 
+```
+POST /containers/(id)/copy
+```
+
 # docker-rest-file-upload
 A simple framework which allows to upload files to most running docker containers via Remote API connection hijacking.
 
@@ -16,3 +22,4 @@ try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
         
 Upload is implemented via docker exec and exec/start commands. This library basically emulates 
 ```docker exec -i ubuntu /bin/bash -c 'cat > file' < file``` behaviour
+
